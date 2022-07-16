@@ -1,29 +1,62 @@
 <script>
+	import { initializeApp, getApp, getApps } from "firebase/app"
+	import {
+		getFirestore,
+		collection,
+		onSnapshot,
+		doc,
+		updateDoc,
+		deleteDoc,
+		addDoc
+	} from "firebase/firestore"
+	import { firebaseConfig } from "$lib/firebaseConfig"
+	import { browser } from "$app/env"
+
+	// const firebaseApp =
+	// 	browser && getApps().length <= 1
+	// 		? initializeApp(firebaseConfig)
+	// 		: getApp()
+	const firebaseApp = initializeApp(firebaseConfig)
+	const db = browser && getFirestore(firebaseApp)
+	const colRef = browser && collection(db, "todos")
 	let todos = []
+
+	const unsubscribe =
+		browser &&
+		onSnapshot(colRef, (querySnapshot) => {
+			let fbTodos = []
+			querySnapshot.forEach((doc) => {
+				fbTodos.push({ ...doc.data(), id: doc.id })
+			})
+			todos = fbTodos
+			console.table(todos)
+		})
+
+	console.log({ firebaseApp, db })
+
 	let task = ""
 	let error = ""
 
-	const addTodo = () => {
-		let todo = {
-			task: task,
-			isComplete: false,
-			createdAt: new Date()
-		}
-
+	const addTodo = async () => {
 		if (task !== "") {
-			todos = [...todos, todo]
+			await addDoc(colRef, {
+				task: task,
+				isComplete: false,
+				createdAt: new Date()
+			})
 			error = ""
 		} else error = "Task is empty"
 		task = ""
 	}
 
-	const markTodoAsComplete = (index) => {
-		todos[index].isComplete = !todos[index].isComplete
+	const markTodoAsComplete = async (item) => {
+		await updateDoc(doc(db, "todos", item.id), {
+			isComplete: !item.isComplete
+		})
 	}
 
-	const deleteTodo = (index) => {
-		let deleteItem = todos[index]
-		todos = todos.filter((todo) => todo != deleteItem)
+	const deleteTodo = async (id) => {
+		await deleteDoc(doc(db, "todos", id))
 	}
 
 	const keyIsPressed = (event) => {
@@ -35,14 +68,14 @@
 <button on:click={addTodo}>Add</button>
 
 <ol>
-	{#each todos as todo, index}
+	{#each todos as todo}
 		<li class:complete={todo.isComplete}>
 			<span>
 				{todo.task}
 			</span>
 			<span>
-				<button on:click={() => markTodoAsComplete(index)}>✓</button>
-				<button on:click={() => deleteTodo(index)}>✗</button>
+				<button on:click={() => markTodoAsComplete(todo)}>✓</button>
+				<button on:click={() => deleteTodo(todo.id)}>✗</button>
 			</span>
 		</li>
 	{:else}
