@@ -1,5 +1,5 @@
 <script>
-	import { firebaseApp, authProvider, db } from "$lib/firebase"
+	import { firebaseApp, authProvider, db, authoriser } from "$lib/firebase"
 	import {
 		collection,
 		onSnapshot,
@@ -8,6 +8,7 @@
 		deleteDoc,
 		addDoc
 	} from "firebase/firestore"
+	import { signInWithPopup } from "firebase/auth"
 
 	import { browser } from "$app/env"
 
@@ -60,8 +61,19 @@
 	const keyIsPressed = (event) => {
 		if (event.key === "Enter") addTodo()
 	}
+
+	const login = async () => {
+		try {
+			const res = await signInWithPopup(authoriser, authProvider)
+			console.log(res.user)
+		} catch (error) {
+			console.log(error.code)
+			console.log(error.message)
+		}
+	}
 </script>
 
+<button on:click={login}>Login</button>
 <h1>Todos</h1>
 <input type="text" bind:value={task} placeholder="Add a task" />
 <button on:click={addTodo}>Add</button>
