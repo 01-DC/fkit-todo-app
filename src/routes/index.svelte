@@ -1,7 +1,6 @@
 <script>
-	import { initializeApp, getApp, getApps } from "firebase/app"
+	import { firebaseApp, authProvider, db } from "$lib/firebase"
 	import {
-		getFirestore,
 		collection,
 		onSnapshot,
 		doc,
@@ -9,18 +8,14 @@
 		deleteDoc,
 		addDoc
 	} from "firebase/firestore"
-	import { GoogleAuthProvider } from "firebase/auth"
-	const provider = new GoogleAuthProvider()
-	
-	import { firebaseConfig } from "$lib/firebaseConfig"
+
 	import { browser } from "$app/env"
 
 	// const firebaseApp =
 	// 	browser && getApps().length <= 1
 	// 		? initializeApp(firebaseConfig)
 	// 		: getApp()
-	const firebaseApp = initializeApp(firebaseConfig)
-	const db = browser && getFirestore(firebaseApp)
+
 	const colRef = browser && collection(db, "todos")
 	let todos = []
 
