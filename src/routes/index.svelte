@@ -9,6 +9,9 @@
 		deleteDoc,
 		addDoc
 	} from "firebase/firestore"
+	import { GoogleAuthProvider } from "firebase/auth"
+	const provider = new GoogleAuthProvider()
+	
 	import { firebaseConfig } from "$lib/firebaseConfig"
 	import { browser } from "$app/env"
 
@@ -64,6 +67,7 @@
 	}
 </script>
 
+<h1>Todos</h1>
 <input type="text" bind:value={task} placeholder="Add a task" />
 <button on:click={addTodo}>Add</button>
 
