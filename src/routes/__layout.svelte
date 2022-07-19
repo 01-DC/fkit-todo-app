@@ -14,6 +14,5 @@
 		background-color: #f2f0ee;
 		text-align: center;
 		display: grid;
-		place-items: center;
 	}
 </style>

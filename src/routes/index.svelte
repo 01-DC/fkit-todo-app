@@ -1,5 +1,5 @@
 <script>
-	import { firebaseApp, authProvider, db, authoriser } from "$lib/firebase"
+	import { firebaseApp, authProvider, db } from "$lib/firebase"
 	import {
 		collection,
 		onSnapshot,
@@ -8,8 +8,8 @@
 		deleteDoc,
 		addDoc
 	} from "firebase/firestore"
-	import { signInWithPopup } from "firebase/auth"
-
+	import { getAuth, signInWithPopup, signOut } from "firebase/auth"
+	import { isLoggedIn, user } from "$lib/stores"
 	import { browser } from "$app/env"
 
 	// const firebaseApp =
@@ -64,8 +64,23 @@
 
 	const login = async () => {
 		try {
-			const res = await signInWithPopup(authoriser, authProvider)
-			console.log(res.user)
+			const auth = getAuth()
+			const res = await signInWithPopup(auth, authProvider)
+			$isLoggedIn = true
+			$user = res.user
+			// console.log(res.user)
+		} catch (error) {
+			console.log(error.code)
+			console.log(error.message)
+		}
+	}
+
+	const logout = async () => {
+		try {
+			const auth = getAuth()
+			const res = await signOut(auth)
+			$isLoggedIn = false
+			$user = {}
 		} catch (error) {
 			console.log(error.code)
 			console.log(error.message)
@@ -73,28 +88,38 @@
 	}
 </script>
 
-<button on:click={login}>Login</button>
-<h1>Todos</h1>
-<input type="text" bind:value={task} placeholder="Add a task" />
-<button on:click={addTodo}>Add</button>
+{#if $isLoggedIn}
+	<div>
+		<h1>Todos 📗</h1>
+		<input type="text" bind:value={task} placeholder="Add a task" />
+		<button on:click={addTodo}>Add</button>
 
-<ol>
-	{#each todos as todo}
-		<li class:complete={todo.isComplete}>
-			<span>
-				{todo.task}
-			</span>
-			<span>
-				<button on:click={() => markTodoAsComplete(todo)}>✓</button>
-				<button on:click={() => deleteTodo(todo.id)}>✗</button>
-			</span>
-		</li>
-	{:else}
-		<p>No todos found</p>
-	{/each}
-	<p class="error">{error}</p>
-</ol>
-
+		<ol>
+			{#each todos as todo}
+				<li class:complete={todo.isComplete}>
+					<span>
+						{todo.task}
+					</span>
+					<span>
+						<button on:click={() => markTodoAsComplete(todo)}
+							>✓</button
+						>
+						<button on:click={() => deleteTodo(todo.id)}>✗</button>
+					</span>
+				</li>
+			{:else}
+				<p>No todos found</p>
+			{/each}
+			<p class="error">{error}</p>
+		</ol>
+		<button on:click={logout}>Logout</button>
+	</div>
+{:else}
+	<div>
+		<h1>Please login to add todos</h1>
+		<button on:click={login}>Google Login</button>
+	</div>
+{/if}
 <svelte:window on:keydown={keyIsPressed} />
 
 <style>
