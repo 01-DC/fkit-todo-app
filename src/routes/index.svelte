@@ -1,5 +1,5 @@
 <script>
-	import { firebaseApp, authProvider, db } from "$lib/firebase"
+	import { firebaseApp, authProvider, db, auth } from "$lib/firebase"
 	import {
 		collection,
 		onSnapshot,
@@ -8,7 +8,7 @@
 		deleteDoc,
 		addDoc
 	} from "firebase/firestore"
-	import { getAuth, signInWithPopup, signOut } from "firebase/auth"
+	import { signInWithPopup, signOut } from "firebase/auth"
 	import { isLoggedIn, user } from "$lib/stores"
 	import { browser } from "$app/env"
 
@@ -64,7 +64,6 @@
 
 	const login = async () => {
 		try {
-			const auth = getAuth()
 			const res = await signInWithPopup(auth, authProvider)
 			$isLoggedIn = true
 			$user = res.user
@@ -77,7 +76,6 @@
 
 	const logout = async () => {
 		try {
-			const auth = getAuth()
 			const res = await signOut(auth)
 			$isLoggedIn = false
 			$user = {}
