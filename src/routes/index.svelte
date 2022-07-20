@@ -6,7 +6,9 @@
 		doc,
 		updateDoc,
 		deleteDoc,
-		addDoc
+		addDoc,
+		getDoc,
+		setDoc
 	} from "firebase/firestore"
 	import { signInWithPopup, signOut } from "firebase/auth"
 	import { isLoggedIn, user } from "$lib/stores"
@@ -17,8 +19,9 @@
 	// 		? initializeApp(firebaseConfig)
 	// 		: getApp()
 
-	const colRef = browser && collection(db, "todos")
+	const colRef = browser && collection(db, "users")
 	let todos = []
+	let docRef
 
 	const unsubscribe =
 		browser &&
@@ -67,6 +70,14 @@
 			const res = await signInWithPopup(auth, authProvider)
 			$isLoggedIn = true
 			$user = res.user
+			docRef = doc(db, "users", $user.uid)
+			const docSnap = await getDoc(docRef)
+			if (docSnap.exists()) {
+				console.log("Todos retrieved")
+			} else {
+				console.log("creating new db for user")
+				await setDoc(docRef, { todos: {} })
+			}
 			// console.log(res.user)
 		} catch (error) {
 			console.log(error.code)
