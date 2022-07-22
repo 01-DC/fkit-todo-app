@@ -14,6 +14,7 @@
 	import { signInWithPopup, signOut } from "firebase/auth"
 	import { isLoggedIn, user, colRef } from "$lib/stores"
 	import { browser } from "$app/env"
+	import Todos from "../components/Todos.svelte"
 
 	// const firebaseApp =
 	// 	browser && getApps().length <= 1
@@ -23,7 +24,6 @@
 	$colRef = browser && collection(db, "users/cJ5V3hgAaUSvpGKxVYpF/todos")
 
 	let todos = []
-	let docRef
 
 	const loadTodos = async () => {
 		onSnapshot($colRef, (querySnapshot) => {
@@ -37,35 +37,6 @@
 	}
 	console.log({ firebaseApp, db })
 
-	let task = ""
-	let error = ""
-
-	const addTodo = async () => {
-		if (task !== "") {
-			await addDoc($colRef, {
-				task: task,
-				isComplete: false,
-				createdAt: new Date()
-			})
-			error = ""
-		} else error = "Task is empty"
-		task = ""
-	}
-
-	const markTodoAsComplete = async (item) => {
-		await updateDoc(doc(db, `users/${$user.uid}/todos`, item.id), {
-			isComplete: !item.isComplete
-		})
-	}
-
-	const deleteTodo = async (id) => {
-		await deleteDoc(doc(db, "todos", id))
-	}
-
-	const keyIsPressed = (event) => {
-		if (event.key === "Enter") addTodo()
-	}
-
 	const login = async () => {
 		try {
 			const res = await signInWithPopup(auth, authProvider)
@@ -74,14 +45,6 @@
 
 			$colRef = collection(db, `users/${$user.uid}/todos`)
 			await loadTodos()
-			// const docSnap = await getDoc(docRef)
-			// if (docSnap.exists()) {
-			// 	console.log("Todos retrieved")
-			// } else {
-			// 	console.log("creating new db for user")
-			// 	await addDoc(collection(db, `users/${$user.uid}/todos`))
-			// }
-			// console.log(res.user)
 		} catch (error) {
 			console.log(error.code)
 			console.log(error.message)
@@ -102,45 +65,35 @@
 
 {#if $isLoggedIn}
 	<div>
-		<h1>Todos 📗</h1>
-		<input type="text" bind:value={task} placeholder="Add a task" />
-		<button on:click={addTodo}>Add</button>
-
-		<ol>
-			{#each todos as todo}
-				<li class:complete={todo.isComplete}>
-					<span>
-						{todo.task}
-					</span>
-					<span>
-						<button on:click={() => markTodoAsComplete(todo)}
-							>✓</button
-						>
-						<button on:click={() => deleteTodo(todo.id)}>✗</button>
-					</span>
-				</li>
-			{:else}
-				<p>No todos found</p>
-			{/each}
-			<p class="error">{error}</p>
-		</ol>
-		<button on:click={logout}>Logout</button>
+		<Todos {todos} />
+		<button on:click={logout} class="logout-button">Logout</button>
 	</div>
 {:else}
-	<div>
+	<div class="login-wrapper">
 		<h1>Please login to add todos</h1>
-		<button on:click={login}>Google Login</button>
+		<button on:click={login} class="login-button">Google Login</button>
 	</div>
 {/if}
-<svelte:window on:keydown={keyIsPressed} />
 
 <style>
-	.complete {
-		text-decoration: line-through;
+	.login-wrapper {
+		margin: auto;
 	}
-	.error {
-		color: red;
+
+	.login-button {
+		padding: 8px;
+		font-family: inherit;
+		font-size: 1.3rem;
+		border: none;
+		background: #fff;
+		margin-top: 16px;
+		transition: all 300ms ease-out;
+		cursor: pointer;
 	}
-	button {
+
+	.login-button:hover {
+		background-color: rgb(255, 52, 52);
+		color: white;
+		transform: translateY(-8px);
 	}
 </style>

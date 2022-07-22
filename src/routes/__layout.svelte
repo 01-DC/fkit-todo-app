@@ -11,8 +11,9 @@
 		margin: 0;
 		box-sizing: border-box;
 		height: 100vh;
-		background-color: #f2f0ee;
+		background-color: #000;
 		text-align: center;
 		display: grid;
+		color: white;
 	}
 </style>
