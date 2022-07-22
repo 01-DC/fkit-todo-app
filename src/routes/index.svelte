@@ -96,4 +96,17 @@
 		color: white;
 		transform: translateY(-8px);
 	}
+
+	.logout-button {
+		color: rgb(255, 52, 52);
+		font-family: inherit;
+		text-decoration: underline;
+		background-color: #000;
+		font-size: 1rem;
+		cursor: pointer;
+		margin-top: 16px;
+	}
+
+	.logout-button:hover {
+	}
 </style>

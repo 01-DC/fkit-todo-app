@@ -34,38 +34,116 @@
 	}
 </script>
 
-<div>
+<div class="todo-wrapper">
 	<h1>Todos 📗</h1>
-	<input type="text" bind:value={task} placeholder="Add a task" />
-	<button on:click={addTodo}>Add</button>
+	<div class="input-wrapper">
+		<input type="text" bind:value={task} placeholder="Add a task" />
+		<button on:click={addTodo} class="add-button">Add</button>
+	</div>
 
-	<ol>
+	<div class="todos-list">
 		{#each todos as todo}
-			<li class:complete={todo.isComplete}>
+			<div class="list-item">
+				<div>
+					<button
+						class="list-okay"
+						on:click={() => markTodoAsComplete(todo)}>✓</button
+					>
+					<span class:complete={todo.isComplete}>
+						{todo.task}
+					</span>
+				</div>
 				<span>
-					{todo.task}
+					<button
+						class="list-del"
+						on:click={() => deleteTodo(todo.id)}>✗</button
+					>
 				</span>
-				<span>
-					<button on:click={() => markTodoAsComplete(todo)}>✓</button>
-					<button on:click={() => deleteTodo(todo.id)}>✗</button>
-				</span>
-			</li>
+			</div>
 		{:else}
 			<p>No todos found</p>
 		{/each}
-		<p class="error">{error}</p>
-	</ol>
+
+		{#if error.length > 0}
+			<p class="error">{error}</p>
+		{/if}
+	</div>
 </div>
 <svelte:window on:keydown={keyIsPressed} />
 
 <style>
+	.todo-wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.add-button {
+		padding: 11px;
+		font-family: inherit;
+		font-size: 1rem;
+		background-color: white;
+		cursor: pointer;
+		border: none;
+		transition: all 300ms ease-out;
+	}
+	.add-button:hover {
+		color: white;
+		background-color: rgb(255, 52, 52);
+		transform: translateY(-4px);
+	}
+	.todos-list {
+		max-width: 500px;
+		text-align: left;
+		margin: 16px 0;
+	}
+	.list-item {
+		display: flex;
+		margin: 10px 0;
+		font-size: 1.1rem;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.list-del {
+		background-color: black;
+		color: rgb(255, 52, 52);
+		font-size: 1rem;
+		cursor: pointer;
+		border: 1px solid rgb(255, 52, 52);
+		margin-left: 10px;
+	}
+	.list-okay {
+		background-color: black;
+		color: rgb(52, 255, 52);
+		font-size: 1rem;
+		cursor: pointer;
+		border: 1px solid rgb(52, 255, 52);
+	}
+
 	.complete {
 		text-decoration: line-through;
+		color: gray;
 	}
+
 	.error {
 		color: red;
-	}
-	input {
+		border: 1px solid red;
+		width: fit-content;
 		padding: 8px;
+		width: 100%;
+		text-align: center;
+	}
+
+	input {
+		padding: 10px;
+		outline: none;
+		width: 250px;
+		font-family: inherit;
+		font-size: 1rem;
+	}
+
+	input:focus {
+		outline: 2px solid rgb(255, 52, 52);
 	}
 </style>
