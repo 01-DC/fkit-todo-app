@@ -1,27 +1,14 @@
 <script>
 	import { firebaseApp, authProvider, db, auth } from "$lib/firebase"
-	import {
-		collection,
-		onSnapshot,
-		doc,
-		updateDoc,
-		deleteDoc,
-		addDoc,
-		getDoc,
-		getDocs,
-		setDoc
-	} from "firebase/firestore"
+	import { collection, onSnapshot } from "firebase/firestore"
 	import { signInWithPopup, signOut } from "firebase/auth"
 	import { isLoggedIn, user, colRef } from "$lib/stores"
-	import { browser } from "$app/env"
 	import Todos from "../components/Todos.svelte"
 
 	// const firebaseApp =
 	// 	browser && getApps().length <= 1
 	// 		? initializeApp(firebaseConfig)
 	// 		: getApp()
-
-	$colRef = browser && collection(db, "users/cJ5V3hgAaUSvpGKxVYpF/todos")
 
 	let todos = []
 
@@ -105,8 +92,5 @@
 		font-size: 1rem;
 		cursor: pointer;
 		margin-top: 16px;
-	}
-
-	.logout-button:hover {
 	}
 </style>
