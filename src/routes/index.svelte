@@ -8,10 +8,11 @@
 		deleteDoc,
 		addDoc,
 		getDoc,
+		getDocs,
 		setDoc
 	} from "firebase/firestore"
 	import { signInWithPopup, signOut } from "firebase/auth"
-	import { isLoggedIn, user } from "$lib/stores"
+	import { isLoggedIn, user, colRef } from "$lib/stores"
 	import { browser } from "$app/env"
 
 	// const firebaseApp =
@@ -19,13 +20,13 @@
 	// 		? initializeApp(firebaseConfig)
 	// 		: getApp()
 
-	const colRef = browser && collection(db, "users")
+	$colRef = browser && collection(db, "users/cJ5V3hgAaUSvpGKxVYpF/todos")
+
 	let todos = []
 	let docRef
 
-	const unsubscribe =
-		browser &&
-		onSnapshot(colRef, (querySnapshot) => {
+	const loadTodos = async () => {
+		onSnapshot($colRef, (querySnapshot) => {
 			let fbTodos = []
 			querySnapshot.forEach((doc) => {
 				fbTodos.push({ ...doc.data(), id: doc.id })
@@ -33,7 +34,7 @@
 			todos = fbTodos
 			console.table(todos)
 		})
-
+	}
 	console.log({ firebaseApp, db })
 
 	let task = ""
@@ -41,7 +42,7 @@
 
 	const addTodo = async () => {
 		if (task !== "") {
-			await addDoc(colRef, {
+			await addDoc($colRef, {
 				task: task,
 				isComplete: false,
 				createdAt: new Date()
@@ -52,7 +53,7 @@
 	}
 
 	const markTodoAsComplete = async (item) => {
-		await updateDoc(doc(db, "todos", item.id), {
+		await updateDoc(doc(db, `users/${$user.uid}/todos`, item.id), {
 			isComplete: !item.isComplete
 		})
 	}
@@ -70,14 +71,16 @@
 			const res = await signInWithPopup(auth, authProvider)
 			$isLoggedIn = true
 			$user = res.user
-			docRef = doc(db, "users", $user.uid)
-			const docSnap = await getDoc(docRef)
-			if (docSnap.exists()) {
-				console.log("Todos retrieved")
-			} else {
-				console.log("creating new db for user")
-				await setDoc(docRef, { todos: {} })
-			}
+
+			$colRef = collection(db, `users/${$user.uid}/todos`)
+			await loadTodos()
+			// const docSnap = await getDoc(docRef)
+			// if (docSnap.exists()) {
+			// 	console.log("Todos retrieved")
+			// } else {
+			// 	console.log("creating new db for user")
+			// 	await addDoc(collection(db, `users/${$user.uid}/todos`))
+			// }
 			// console.log(res.user)
 		} catch (error) {
 			console.log(error.code)
@@ -139,6 +142,5 @@
 		color: red;
 	}
 	button {
-		
 	}
 </style>
