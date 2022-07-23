@@ -14,7 +14,7 @@
 		padding: 0;
 		margin: 0;
 		box-sizing: border-box;
-		height: 100vh;
+		min-height: 100vh;
 		background-color: #000;
 		text-align: center;
 		display: grid;
