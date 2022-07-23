@@ -89,7 +89,7 @@
 	}
 	.add-button:hover {
 		color: white;
-		background-color: rgb(255, 52, 52);
+		background-color: #ff3434;
 		transform: translateY(-4px);
 	}
 	.todos-list {
@@ -107,18 +107,18 @@
 
 	.list-del {
 		background-color: black;
-		color: rgb(255, 52, 52);
+		color: #ff3434;
 		font-size: 1rem;
 		cursor: pointer;
-		border: 1px solid rgb(255, 52, 52);
+		border: 1px solid #ff3434;
 		margin-left: 10px;
 	}
 	.list-okay {
 		background-color: black;
-		color: rgb(52, 255, 52);
+		color: #34ff34;
 		font-size: 1rem;
 		cursor: pointer;
-		border: 1px solid rgb(52, 255, 52);
+		border: 1px solid #34ff34;
 	}
 
 	.complete {
@@ -144,6 +144,6 @@
 	}
 
 	input:focus {
-		outline: 2px solid rgb(255, 52, 52);
+		outline: 2px solid #ff3434;
 	}
 </style>

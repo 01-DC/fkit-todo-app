@@ -1,5 +1,5 @@
 <script>
-	import { firebaseApp, authProvider, db, auth } from "$lib/firebase"
+	import { authProvider, db, auth } from "$lib/firebase"
 	import { collection, onSnapshot } from "firebase/firestore"
 	import { signInWithPopup, signOut } from "firebase/auth"
 	import { isLoggedIn, user, colRef } from "$lib/stores"
@@ -19,10 +19,8 @@
 				fbTodos.push({ ...doc.data(), id: doc.id })
 			})
 			todos = fbTodos
-			// console.table(todos)
 		})
 	}
-	// console.log({ firebaseApp, db })
 
 	const login = async () => {
 		try {
@@ -58,6 +56,14 @@
 	</div>
 {:else}
 	<div class="login-wrapper">
+		<h1>
+			A todo app built using <span style:color="#ff3434">FKIT</span> stack.
+		</h1>
+		<h1 style:color="#ffcc30">
+			<span style:color="#ff3434">F</span>irebase
+			<span style:color="white">&amp;</span>
+			Svelte<span style:color="#ff3434">Kit</span>
+		</h1>
 		<h1>Please login to add todos</h1>
 		<button on:click={login} class="login-button">Google Login</button>
 	</div>
@@ -74,19 +80,18 @@
 		font-size: 1.3rem;
 		border: none;
 		background: #fff;
-		margin-top: 16px;
+		margin-top: 20px;
 		transition: all 300ms ease-out;
 		cursor: pointer;
 	}
 
 	.login-button:hover {
-		background-color: rgb(255, 52, 52);
-		color: white;
+		background-color: #ffcc30;
 		transform: translateY(-8px);
 	}
 
 	.logout-button {
-		color: rgb(255, 52, 52);
+		color: #ffcc30;
 		font-family: inherit;
 		text-decoration: underline;
 		background-color: #000;

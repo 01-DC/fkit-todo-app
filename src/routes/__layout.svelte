@@ -1,7 +1,12 @@
 <!-- <h1>Layout</h1> -->
 <div id="svelte-app">
 	<slot />
+	<footer>
+		Made by <span style:color="#ff3434">DC</span> with
+		<span style:color="#ff3434">&lt;3</span>
+	</footer>
 </div>
+<div />
 
 <style>
 	#svelte-app {
@@ -15,5 +20,10 @@
 		text-align: center;
 		display: grid;
 		color: white;
+	}
+
+	footer {
+		margin-top: auto;
+		margin-bottom: 16px;
 	}
 </style>
