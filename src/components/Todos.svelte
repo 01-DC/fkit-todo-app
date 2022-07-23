@@ -96,6 +96,7 @@
 		max-width: 500px;
 		text-align: left;
 		margin: 16px 0;
+		padding: 0 12px;
 	}
 	.list-item {
 		display: flex;

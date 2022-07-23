@@ -6,7 +6,6 @@
 		<span style:color="#ff3434">&lt;3</span>
 	</footer>
 </div>
-<div />
 
 <style>
 	#svelte-app {
@@ -24,6 +23,6 @@
 
 	footer {
 		margin-top: auto;
-		margin-bottom: 16px;
+		margin-bottom: 5vh;
 	}
 </style>
