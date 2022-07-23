@@ -64,7 +64,7 @@
 			<span style:color="white">&amp;</span>
 			Svelte<span style:color="#ff3434">Kit</span>
 		</h1>
-		<h1>Please login to add todos</h1>
+		<h2>Please login to add todos</h2>
 		<button on:click={login} class="login-button">Google Login</button>
 	</div>
 {/if}

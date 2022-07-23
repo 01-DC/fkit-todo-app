@@ -23,6 +23,6 @@
 
 	footer {
 		margin-top: auto;
-		margin-bottom: 5vh;
+		margin-bottom: 10vh;
 	}
 </style>
