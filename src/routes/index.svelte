@@ -22,7 +22,7 @@
 			// console.table(todos)
 		})
 	}
-	console.log({ firebaseApp, db })
+	// console.log({ firebaseApp, db })
 
 	const login = async () => {
 		try {
