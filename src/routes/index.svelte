@@ -19,7 +19,7 @@
 				fbTodos.push({ ...doc.data(), id: doc.id })
 			})
 			todos = fbTodos
-			console.table(todos)
+			// console.table(todos)
 		})
 	}
 	console.log({ firebaseApp, db })
@@ -43,6 +43,7 @@
 			const res = await signOut(auth)
 			$isLoggedIn = false
 			$user = {}
+			todos = []
 		} catch (error) {
 			console.log(error.code)
 			console.log(error.message)
